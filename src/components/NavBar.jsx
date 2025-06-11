@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
   // Handle scroll effect
   useEffect(() => {
@@ -19,14 +22,37 @@ export default function Navbar() {
     setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
   };
 
+  // Handle menu toggle
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  // Handle search modal
+  const toggleSearchModal = () => {
+    setIsSearchModalOpen(!isSearchModalOpen);
+  };
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.navbar')) {
+        setIsMenuOpen(false);
+        setActiveDropdown(null);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
   return (
     <>
       <nav className={`navbar navbar-expand-lg fixed-top transition-all ${
         isScrolled 
-          ? 'navbar-light bg-transparent shadow-lg py-2' 
+          ? 'navbar-transparent bg-light shadow-lg py-2' 
           : 'navbar-dark bg-dark py-3'
       }`}>
-        <div className="container">
+        <div className="container-fluid">
           {/* Brand/Logo */}
           <a className="navbar-brand fw-bold d-flex align-items-center" href="#home">
             <div className="brand-icon me-2 p-2 rounded-circle bg-primary">
@@ -34,7 +60,7 @@ export default function Navbar() {
             </div>
             <span className="brand-text">
               <span className="text-primary">Shayari</span>
-              <span className="text-light ms-1">Collection</span>
+              <span className="text-light ms-1">.Com</span>
             </span>
           </a>
 
@@ -42,21 +68,20 @@ export default function Navbar() {
           <button 
             className="navbar-toggler border-0 p-1" 
             type="button" 
-            data-bs-toggle="collapse" 
-            data-bs-target="#navbarNav"
+            onClick={toggleMenu}
             aria-controls="navbarNav" 
-            aria-expanded="false" 
+            aria-expanded={isMenuOpen}
             aria-label="Toggle navigation"
           >
             <span className="navbar-toggler-icon-custom">
-              <span className="line line-1"></span>
-              <span className="line line-2"></span>
-              <span className="line line-3"></span>
+              <span className={`line line-1 ${isMenuOpen ? 'active' : ''}`}></span>
+              <span className={`line line-2 ${isMenuOpen ? 'active' : ''}`}></span>
+              <span className={`line line-3 ${isMenuOpen ? 'active' : ''}`}></span>
             </span>
           </button>
 
           {/* Navbar Content */}
-          <div className="collapse navbar-collapse" id="navbarNav">
+          <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`} id="navbarNav">
             {/* Main Navigation */}
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
@@ -79,13 +104,18 @@ export default function Navbar() {
                   className="nav-link dropdown-toggle fw-semibold px-3" 
                   href="#" 
                   role="button" 
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleDropdown('categories');
+                  }}
+                  aria-expanded={activeDropdown === 'categories'}
                 >
                   <i className="bi bi-tags-fill me-2"></i>
                   Categories
                 </a>
-                <ul className="dropdown-menu dropdown-menu-dark shadow-lg border-0 mt-2">
+                <ul className={`dropdown-menu dropdown-menu-dark shadow-lg border-0 mt-2 ${
+                  activeDropdown === 'categories' ? 'show' : ''
+                }`}>
                   <li>
                     <a className="dropdown-item py-2" href="#love">
                       <i className="bi bi-heart text-danger me-2"></i>
@@ -141,7 +171,7 @@ export default function Navbar() {
               <form className="d-none d-lg-flex me-3" role="search">
                 <div className="input-group">
                   <input 
-                    className="form-control form-control-sm bg-dark border-secondary text-light" 
+                    className="form-control form-control-sm bg-light border-secondary text-dark" 
                     type="search" 
                     placeholder="Search shayari..." 
                     aria-label="Search"
@@ -154,22 +184,30 @@ export default function Navbar() {
               </form>
 
               {/* Mobile Search Button */}
-              <button className="btn btn-outline-light d-lg-none me-2" data-bs-toggle="modal" data-bs-target="#searchModal">
+              <button 
+                className="btn btn-outline-light d-lg-none me-2" 
+                onClick={toggleSearchModal}
+              >
                 <i className="bi bi-search"></i>
               </button>
 
               {/* Language Selector */}
               <div className="dropdown me-2">
                 <button 
-                  className="btn btn-outline-light btn-sm dropdown-toggle border-0" 
+                  className="btn btn-outline-primary btn-sm dropdown-toggle border-0" 
                   type="button" 
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleDropdown('language');
+                  }}
+                  aria-expanded={activeDropdown === 'language'}
                 >
-                  <i className="bi bi-globe me-1"></i>
+                  <i className="bi bi-globe"></i>
                   <span className="d-none d-md-inline">EN</span>
                 </button>
-                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-dark shadow-lg border-0">
+                <ul className={`dropdown-menu dropdown-menu-end dropdown-menu-light shadow-lg border-0 ${
+                  activeDropdown === 'language' ? 'show' : ''
+                }`}>
                   <li>
                     <a className="dropdown-item py-2" href="#">
                       <span className="me-2">🇺🇸</span>English
@@ -188,27 +226,22 @@ export default function Navbar() {
                 </ul>
               </div>
 
-              {/* Post Shayari Button */}
-              <a 
-                href="#post" 
-                className="btn btn-primary fw-semibold px-3 py-2"
-              >
-                <i className="bi bi-plus-circle me-2"></i>
-                <span className="d-none d-sm-inline">Post Shayari</span>
-                <span className="d-sm-none">Post</span>
-              </a>
-
               {/* User Profile Dropdown (Optional) */}
               <div className="dropdown ms-2">
                 <button 
-                  className="btn btn-outline-light btn-sm rounded-circle p-2" 
+                  className="btn btn-outline-primary btn-sm p-2 me-1" 
                   type="button" 
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleDropdown('profile');
+                  }}
+                  aria-expanded={activeDropdown === 'profile'}
                 >
-                  <i className="bi bi-person-fill"></i>
+                  <i class="bi bi-person-add"></i>
                 </button>
-                <ul className="dropdown-menu dropdown-menu-end dropdown-menu-dark shadow-lg border-0">
+                <ul className={`dropdown-menu dropdown-menu-end dropdown-menu-dark shadow-lg border-0 ${
+                  activeDropdown === 'profile' ? 'show' : ''
+                }`}>
                   <li>
                     <a className="dropdown-item py-2" href="#profile">
                       <i className="bi bi-person me-2"></i>
@@ -242,48 +275,64 @@ export default function Navbar() {
                   </li>
                 </ul>
               </div>
+               {/* Post Shayari Button */}
+              <a 
+                href="#post" 
+                className="btn btn-primary fw-semibold px-3 py-2"
+              >
+                <i className="bi bi-plus-circle me-2"></i>
+                <span className="d-none d-sm-inline">Post Shayari</span>
+                <span className="d-sm-none">Post</span>
+              </a>
             </div>
           </div>
         </div>
       </nav>
 
       {/* Mobile Search Modal */}
-      <div className="modal fade" id="searchModal" tabIndex="-1" aria-labelledby="searchModalLabel" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content bg-dark border-0">
-            <div className="modal-header border-secondary">
-              <h5 className="modal-title text-light" id="searchModalLabel">
-                <i className="bi bi-search me-2"></i>Search Shayari
-              </h5>
-              <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div className="modal-body">
-              <form>
-                <div className="input-group">
-                  <input 
-                    type="search" 
-                    className="form-control bg-dark border-secondary text-light" 
-                    placeholder="Search for shayari, categories, or poets..."
-                    autoFocus
-                  />
-                  <button className="btn btn-primary" type="submit">
-                    <i className="bi bi-search"></i>
-                  </button>
-                </div>
-                <div className="mt-3">
-                  <small className="text-muted">Popular searches:</small>
-                  <div className="mt-2">
-                    <span className="badge bg-secondary me-2 mb-2">Love</span>
-                    <span className="badge bg-secondary me-2 mb-2">Friendship</span>
-                    <span className="badge bg-secondary me-2 mb-2">Motivational</span>
-                    <span className="badge bg-secondary me-2 mb-2">Sad</span>
+      {isSearchModalOpen && (
+        <div className="modal fade show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content bg-dark border-0">
+              <div className="modal-header border-secondary">
+                <h5 className="modal-title text-light">
+                  <i className="bi bi-search me-2"></i>Search Shayari
+                </h5>
+                <button 
+                  type="button" 
+                  className="btn-close btn-close-white" 
+                  onClick={toggleSearchModal}
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="modal-body">
+                <form>
+                  <div className="input-group">
+                    <input 
+                      type="search" 
+                      className="form-control bg-dark border-secondary text-light" 
+                      placeholder="Search for shayari, categories, or poets..."
+                      autoFocus
+                    />
+                    <button className="btn btn-primary" type="submit">
+                      <i className="bi bi-search"></i>
+                    </button>
                   </div>
-                </div>
-              </form>
+                  <div className="mt-3">
+                    <small className="text-muted">Popular searches:</small>
+                    <div className="mt-2">
+                      <span className="badge bg-secondary me-2 mb-2">Love</span>
+                      <span className="badge bg-secondary me-2 mb-2">Friendship</span>
+                      <span className="badge bg-secondary me-2 mb-2">Motivational</span>
+                      <span className="badge bg-secondary me-2 mb-2">Sad</span>
+                    </div>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Custom Styles */}
       <style jsx>{`
@@ -346,15 +395,18 @@ export default function Navbar() {
           border-radius: 2px;
         }
         
-        .navbar-toggler[aria-expanded="true"] .line-1 {
+        .navbar-toggler[aria-expanded="true"] .line-1,
+        .line.line-1.active {
           transform: rotate(45deg) translate(5px, 5px);
         }
         
-        .navbar-toggler[aria-expanded="true"] .line-2 {
+        .navbar-toggler[aria-expanded="true"] .line-2,
+        .line.line-2.active {
           opacity: 0;
         }
         
-        .navbar-toggler[aria-expanded="true"] .line-3 {
+        .navbar-toggler[aria-expanded="true"] .line-3,
+        .line.line-3.active {
           transform: rotate(-45deg) translate(7px, -6px);
         }
         

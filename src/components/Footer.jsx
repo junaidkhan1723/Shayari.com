@@ -11,7 +11,7 @@ export default function Footer() {
             <div className="mb-4">
               <h4 className="fw-bold text-white mb-3">
                 <i className="bi bi-heart-fill text-danger me-2"></i>
-                Shayari Collection
+                Shayari.Com
               </h4>
               <p className="text-light opacity-75 mb-4">
                 A beautiful platform where hearts meet through poetry. Share your emotions, 
@@ -176,7 +176,7 @@ export default function Footer() {
           <div className="row align-items-center">
             <div className="col-12 col-md-6 text-center text-md-start">
               <p className="mb-0 text-light opacity-75">
-                © {currentYear} Shayari Collection. Made with 
+                © {currentYear} Shayari.Com Made with 
                 <i className="bi bi-heart-fill text-danger mx-1"></i>
                 for poetry lovers
               </p>
