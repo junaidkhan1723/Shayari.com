@@ -1,0 +1,18 @@
+
+.navbar-glass {
+  backdrop-filter: blur(12px);
+  background: linear-gradient(to right, #d9d5d5, #e3d9e3);
+  border-radius: 10px;
+}
+
+.text-gradient {
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-primary {
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  border: none;
+}
