@@ -7,3 +7,4 @@ const ShayariSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('Shayari', ShayariSchema);
+   

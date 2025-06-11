@@ -11,7 +11,7 @@ export default function ShayariForm({ onPost }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.post("http://localhost:5000/api/shayari", formData);
+    await axios.post("https://shayari-com-0te7.onrender.com/api/shayari", formData);
     onPost();
     setFormData({ name: "", category: "", content: "" });
   };
