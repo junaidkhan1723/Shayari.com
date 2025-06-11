@@ -7,12 +7,12 @@ export default function ShayariCard({ shayari, onUpdate }) {
   const [showFull, setShowFull] = useState(false);
 
   const handleDelete = async () => {
-    await axios.delete(`http://localhost:5000/api/shayari/${shayari._id}`);
+    await axios.delete(`https://shayari-com-0te7.onrender.com/api/shayari/${shayari._id}`);
     onUpdate();
   };
 
   const handleEdit = async () => {
-    await axios.put(`http://localhost:5000/api/shayari/${shayari._id}`, { content: editContent });
+    await axios.put(`https://shayari-com-0te7.onrender.com/api/shayari/${shayari._id}`, { content: editContent });
     setIsEditing(false);
     onUpdate();
   };

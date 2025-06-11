@@ -7,7 +7,7 @@ function App() {
   const [shayaris, setShayaris] = useState([]);
 
   const fetchShayaris = async () => {
-    const res = await axios.get("http://localhost:5000/api/shayari");
+    const res = await axios.get("https://shayari-com-0te7.onrender.com/api/shayari");
     setShayaris(res.data.reverse()); 
   };
 
