@@ -66,7 +66,7 @@ export default function Navbar() {
 
           {/* Mobile Toggle Button */}
           <button 
-            className="navbar-toggler border-0 p-1" 
+            className="navbar-toggler bg-primary border-0 p-1" 
             type="button" 
             onClick={toggleMenu}
             aria-controls="navbarNav" 
@@ -171,7 +171,7 @@ export default function Navbar() {
               <form className="d-none d-lg-flex me-3" role="search">
                 <div className="input-group">
                   <input 
-                    className="form-control form-control-sm bg-light border-secondary text-dark" 
+                    className="form-control form-control-sm bg-light border-primary text-dark" 
                     type="search" 
                     placeholder="Search shayari..." 
                     aria-label="Search"
@@ -185,7 +185,7 @@ export default function Navbar() {
 
               {/* Mobile Search Button */}
               <button 
-                className="btn btn-outline-light d-lg-none me-2" 
+                className="btn btn-outline-primary d-lg-none me-2" 
                 onClick={toggleSearchModal}
               >
                 <i className="bi bi-search"></i>
