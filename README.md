@@ -14,12 +14,7 @@
   <img src="https://img.shields.io/github/issues/junaidkhan1723/Shayari.com" />
   <img src="https://img.shields.io/badge/PRs-welcome-green" />
 </p>
-
 ---
-
-
----
-
 ## 📸 Preview
 
 ![image](https://github.com/user-attachments/assets/7b1422df-fb3b-46d6-b3ce-34efb4d155f2)
@@ -36,9 +31,7 @@
 - 📦 MongoDB database (cloud-based)
 - 🎨 Responsive UI using React + Bootstrap
 - 🌐 RESTful API with Express.js
-
 ---
-
 ## 🔧 Tech Stack
 
 ### 🖥️ Frontend
