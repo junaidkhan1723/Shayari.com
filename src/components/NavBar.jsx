@@ -84,7 +84,7 @@ export default function Navbar() {
           <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`} id="navbarNav">
             {/* Main Navigation */}
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
+              <li className="nav-item bg-primary rounded">
                 <a className="nav-link active fw-semibold px-3" href="#home">
                   <i className="bi bi-house-fill me-2"></i>
                   Home

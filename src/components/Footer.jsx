@@ -178,7 +178,7 @@ export default function Footer() {
               <p className="mb-0 text-light opacity-75">
                 © {currentYear} Shayari.Com Made with 
                 <i className="bi bi-heart-fill text-danger mx-1"></i>
-                for poetry lovers
+                for shayari & poetry lovers :: ©Junaid Khan
               </p>
             </div>
             <div className="col-12 col-md-6 text-center text-md-end mt-2 mt-md-0">
