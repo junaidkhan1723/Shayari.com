@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import "./NavBar.css"
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -334,125 +335,6 @@ export default function Navbar() {
         </div>
       )}
 
-      {/* Custom Styles */}
-      <style jsx>{`
-        .navbar {
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          transition: all 0.3s ease;
-        }
-        
-        .brand-icon {
-          width: 40px;
-          height: 40px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: transform 0.3s ease;
-        }
-        
-        .brand-icon:hover {
-          transform: scale(1.1);
-        }
-        
-        .brand-text {
-          font-size: 1.5rem;
-          font-weight: 700;
-        }
-        
-        .nav-link {
-          position: relative;
-          transition: all 0.3s ease;
-          border-radius: 8px;
-        }
-        
-        .nav-link:hover {
-          background-color: rgba(255, 255, 255, 0.1);
-          transform: translateY(-1px);
-        }
-        
-        .nav-link.active {
-          background-color: rgba(13, 110, 253, 0.2);
-          color: #fff !important;
-        }
-        
-        .navbar-toggler-icon-custom {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          width: 24px;
-          height: 18px;
-          cursor: pointer;
-        }
-        
-        .line {
-          width: 100%;
-          height: 2px;
-          background-color: #fff;
-          margin: 2px 0;
-          transition: all 0.3s ease;
-          border-radius: 2px;
-        }
-        
-        .navbar-toggler[aria-expanded="true"] .line-1,
-        .line.line-1.active {
-          transform: rotate(45deg) translate(5px, 5px);
-        }
-        
-        .navbar-toggler[aria-expanded="true"] .line-2,
-        .line.line-2.active {
-          opacity: 0;
-        }
-        
-        .navbar-toggler[aria-expanded="true"] .line-3,
-        .line.line-3.active {
-          transform: rotate(-45deg) translate(7px, -6px);
-        }
-        
-        .dropdown-menu {
-          border-radius: 12px;
-          padding: 8px;
-        }
-        
-        .dropdown-item {
-          border-radius: 8px;
-          transition: all 0.3s ease;
-        }
-        
-        .dropdown-item:hover {
-          background-color: rgba(255, 255, 255, 0.1);
-          transform: translateX(5px);
-        }
-        
-        .btn {
-          transition: all 0.3s ease;
-        }
-        
-        .btn:hover {
-          transform: translateY(-1px);
-        }
-        
-        @media (max-width: 991.98px) {
-          .navbar-nav {
-            padding-top: 1rem;
-          }
-          
-          .nav-link {
-            padding: 0.75rem 1rem !important;
-            margin: 0.25rem 0;
-          }
-        }
-        
-        .transition-all {
-          transition: all 0.3s ease;
-        }
-        
-        .form-control:focus {
-          border-color: #0d6efd;
-          box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
-        }
-      `}</style>
     </>
   );
 }
