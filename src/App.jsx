@@ -24,7 +24,7 @@ function App() {
   <ShayariForm onPost={fetchShayaris} />
   
   {/* Shayari Feed Section */}
-  <div className="bg-light py-5">
+  <div className="bg-light py-5 " id="Shayaripage">
     <div className="container">
       {/* Section Header */}
       <div className="row mb-5">

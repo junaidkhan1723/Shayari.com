@@ -85,7 +85,7 @@ export default function Navbar() {
           <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`} id="navbarNav">
             {/* Main Navigation */}
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item bg-primary rounded">
+              <li className="nav-item bg-primary rounded me-1">
                 <a className="nav-link active fw-semibold px-3" href="#home">
                   <i className="bi bi-house-fill me-2"></i>
                   Home
@@ -233,6 +233,7 @@ export default function Navbar() {
                   className="btn btn-outline-primary btn-sm p-2 me-1" 
                   type="button" 
                   onClick={(e) => {
+                    alert("Profile Page Comming Soon....💌")
                     e.preventDefault();
                     toggleDropdown('profile');
                   }}
