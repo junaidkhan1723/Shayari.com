@@ -194,7 +194,7 @@ export default function Footer() {
                 placeholder="Your email"
                 style={{ fontSize: "0.85rem" }}
               />
-              <button className="btn btn-primary btn-sm" type="button">
+              <button className="btn btn-primary btn-sm" type="button" onClick={()=>{alert("This Feature Work in Progress 📝")}}>
                 <i className="bi bi-send"></i>
               </button>
             </div>
