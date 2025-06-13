@@ -35,7 +35,7 @@ function App() {
             <i className="bi bi-heart-fill text-danger ms-3"></i>
           </h2>
           <p className="lead text-muted mb-0">
-            Discover beautiful thoughts and emotions expressed through poetry
+            Discover beautiful thoughts and emotions expressed through shayari & poetry ✨
           </p>
           <div className="mt-3">
             <span className="badge bg-primary fs-6 px-3 py-2">
@@ -45,7 +45,7 @@ function App() {
         </div>
       </div>
 
-      {/* Shayari Cards Grid */}
+      {/* //Shayari Cards Grid */}
       <div className="row g-4">
         {shayaris.length > 0 ? (
           shayaris.map((s) => (
@@ -58,6 +58,7 @@ function App() {
               <div className="mb-4">
                 <i className="bi bi-journal-text text-muted" style={{ fontSize: '4rem' }}></i>
               </div>
+              <h4 className="text-muted mb-3">Server is Loading <i class="bi bi-arrow-clockwise"></i></h4>
               <h4 className="text-muted mb-3">No Shayaris Yet</h4>
               <p className="text-muted mb-4">
                 Be the first to share your beautiful thoughts and emotions
@@ -67,7 +68,7 @@ function App() {
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               >
                 <i className="bi bi-plus-circle me-2"></i>
-                Post Your First Shayari
+                Post Your First Shayari ❤
               </button>
             </div>
           </div>
@@ -75,7 +76,7 @@ function App() {
       </div>
 
       {/* Load More Button (if you implement pagination) */}
-      {shayaris.length > 0 && (
+      {shayaris.length > 0 && ( 
         <div className="row mt-5">
           <div className="col-12 text-center">
             <div className="border-top pt-4">
