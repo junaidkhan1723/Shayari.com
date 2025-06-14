@@ -48,6 +48,7 @@ export default function Navbar() {
 
   return (
     <>
+    {/* Scroll transition */}
       <nav className={`navbar navbar-expand-lg fixed-top transition-all ${
         isScrolled 
           ? 'navbar-transparent bg-light shadow-lg py-2' 
