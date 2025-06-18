@@ -1,11 +1,9 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react';
 import axios from "axios";
-import './NavBAr.css'
-
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import './NavBar.css'
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -15,7 +13,6 @@ export default function Navbar() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login'); // 'login' or 'signup'
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [showFirstTimeModal, setShowFirstTimeModal] = useState(true);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -619,7 +616,6 @@ export default function Navbar() {
         </div>
       )}
 
-     
     </>
   );
 }
