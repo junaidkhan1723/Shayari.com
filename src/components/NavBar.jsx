@@ -1,12 +1,30 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from 'react';
+import axios from "axios";
+import './NavBAr.css'
+
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import "./NavBar.css"
+import "bootstrap/dist/css/bootstrap.min.css";
+
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authMode, setAuthMode] = useState('login'); // 'login' or 'signup'
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showFirstTimeModal, setShowFirstTimeModal] = useState(true);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    confirmPassword: '',
+    fullName: '',
+    rememberMe: false
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Handle scroll effect
   useEffect(() => {
@@ -16,6 +34,17 @@ export default function Navbar() {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Show first time modal
+  useEffect(() => {
+    const hasVisited = localStorage.getItem('hasVisited');
+    if (!hasVisited) {
+      setTimeout(() => {
+        setIsAuthModalOpen(true);
+        setAuthMode('login');
+      }, 1500); // Show after 1.5 seconds
+    }
   }, []);
 
   // Handle dropdown toggle
@@ -33,7 +62,65 @@ export default function Navbar() {
     setIsSearchModalOpen(!isSearchModalOpen);
   };
 
-  // Close menu when clicking outside
+  // Handle authentication modal
+  const toggleAuthModal = () => {
+    setIsAuthModalOpen(!isAuthModalOpen);
+    if (!isAuthModalOpen) {
+      setFormData({
+        email: '',
+        password: '',
+        confirmPassword: '',
+        fullName: '',
+        rememberMe: false
+      });
+    }
+  };
+
+  // Switch between login and signup
+  const switchAuthMode = (mode) => {
+    setAuthMode(mode);
+    setFormData({
+      email: '',
+      password: '',
+      confirmPassword: '',
+      fullName: '',
+      rememberMe: false
+    });
+  };
+
+  // Handle form input changes
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  // Handle form submission
+ const handleLogin = async (email, password) => {
+  try {
+    const res = await axios.post('/auth/login', { email, password });
+    localStorage.setItem('token', res.data.token);
+    setIsAuthenticated(true);
+  } catch (err) {
+    console.error(err.response?.data?.msg || 'Login error');
+  }
+     // Mock authentication success
+    setIsAuthenticated(true);
+    setIsAuthModalOpen(false);
+    localStorage.setItem('hasVisited', 'true');
+    
+    alert(`${authMode === 'login' ? 'Login' : 'Sign up'} successful!`);
+  };
+
+  // Handle logout
+ const handleLogout = () => {
+  localStorage.removeItem('token');
+  setIsAuthenticated(false);
+  
+};
+  // Close modals when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!event.target.closest('.navbar')) {
@@ -48,7 +135,6 @@ export default function Navbar() {
 
   return (
     <>
-    {/* Scroll transition */}
       <nav className={`navbar navbar-expand-lg fixed-top transition-all ${
         isScrolled 
           ? 'navbar-transparent bg-light shadow-lg py-2' 
@@ -86,7 +172,7 @@ export default function Navbar() {
           <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`} id="navbarNav">
             {/* Main Navigation */}
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item bg-primary rounded me-1">
+              <li className="nav-item bg-primary rounded">
                 <a className="nav-link active fw-semibold px-3" href="#home">
                   <i className="bi bi-house-fill me-2"></i>
                   Home
@@ -170,7 +256,7 @@ export default function Navbar() {
             {/* Right Side Actions */}
             <div className="d-flex align-items-center gap-2">
               {/* Search Bar */}
-              <form className="d-none d-lg-flex me-3" role="search">
+              <div className="d-none d-lg-flex me-3">
                 <div className="input-group">
                   <input 
                     className="form-control form-control-sm bg-light border-primary text-dark" 
@@ -179,11 +265,11 @@ export default function Navbar() {
                     aria-label="Search"
                     style={{ minWidth: '200px' }}
                   />
-                  <button className="btn btn-outline-primary btn-sm" type="submit">
+                  <button className="btn btn-outline-primary btn-sm" type="button">
                     <i className="bi bi-search"></i>
                   </button>
                 </div>
-              </form>
+              </div>
 
               {/* Mobile Search Button */}
               <button 
@@ -228,57 +314,69 @@ export default function Navbar() {
                 </ul>
               </div>
 
-              {/* User Profile Dropdown (Optional) */}
-              <div className="dropdown ms-2">
+              {/* Authentication Section */}
+              {!isAuthenticated ? (
                 <button 
-                  className="btn btn-outline-primary btn-sm p-2 me-1" 
+                  className="btn btn-outline-primary btn-sm p-2 me-2" 
                   type="button" 
-                  onClick={(e) => {
-                    alert("Profile Page Comming Soon....💌")
-                    e.preventDefault();
-                    toggleDropdown('profile');
-                  }}
-                  aria-expanded={activeDropdown === 'profile'}
+                  onClick={toggleAuthModal}
+                  title="Login / Sign Up"
                 >
-                  <i class="bi bi-person-add"></i>
+                  <i className="bi bi-person-plus"></i>
+                  <span className="d-none d-sm-inline ms-2">Login</span>
                 </button>
-                <ul className={`dropdown-menu dropdown-menu-end dropdown-menu-dark shadow-lg border-0 ${
-                  activeDropdown === 'profile' ? 'show' : ''
-                }`}>
-                  <li>
-                    <a className="dropdown-item py-2" href="#profile">
-                      <i className="bi bi-person me-2"></i>
-                      My Profile
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item py-2" href="#my-shayaris">
-                      <i className="bi bi-journal-text me-2"></i>
-                      My Shayaris
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item py-2" href="#favorites">
-                      <i className="bi bi-heart me-2"></i>
-                      Favorites
-                    </a>
-                  </li>
-                  <li><hr className="dropdown-divider opacity-25" /></li>
-                  <li>
-                    <a className="dropdown-item py-2" href="#settings">
-                      <i className="bi bi-gear me-2"></i>
-                      Settings
-                    </a>
-                  </li>
-                  <li>
-                    <a className="dropdown-item py-2 text-danger" href="#logout">
-                      <i className="bi bi-box-arrow-right me-2"></i>
-                      Logout
-                    </a>
-                  </li>
-                </ul>
-              </div>
-               {/* Post Shayari Button */}
+              ) : (
+                <div className="dropdown ms-2">
+                  <button 
+                    className="btn btn-primary btn-sm p-2 me-1" 
+                    type="button" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      toggleDropdown('profile');
+                    }}
+                    aria-expanded={activeDropdown === 'profile'}
+                  >
+                    <i className="bi bi-person-circle"></i>
+                  </button>
+                  <ul className={`dropdown-menu dropdown-menu-end dropdown-menu-dark shadow-lg border-0 ${
+                    activeDropdown === 'profile' ? 'show' : ''
+                  }`}>
+                    <li>
+                      <a className="dropdown-item py-2" href="#profile">
+                        <i className="bi bi-person me-2"></i>
+                        My Profile
+                      </a>
+                    </li>
+                    <li>
+                      <a className="dropdown-item py-2" href="#my-shayaris">
+                        <i className="bi bi-journal-text me-2"></i>
+                        My Shayaris
+                      </a>
+                    </li>
+                    <li>
+                      <a className="dropdown-item py-2" href="#favorites">
+                        <i className="bi bi-heart me-2"></i>
+                        Favorites
+                      </a>
+                    </li>
+                    <li><hr className="dropdown-divider opacity-25" /></li>
+                    <li>
+                      <a className="dropdown-item py-2" href="#settings">
+                        <i className="bi bi-gear me-2"></i>
+                        Settings
+                      </a>
+                    </li>
+                    <li>
+                      <button className="dropdown-item py-2 text-danger border-0 bg-transparent w-100 text-start" onClick={handleLogout}>
+                        <i className="bi bi-box-arrow-right me-2"></i>
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
+
+              {/* Post Shayari Button */}
               <a 
                 href="#post" 
                 className="btn btn-primary fw-semibold px-3 py-2"
@@ -292,9 +390,193 @@ export default function Navbar() {
         </div>
       </nav>
 
+      {/* Authentication Modal */}
+      {isAuthModalOpen && (
+        <div 
+          className="modal fade show d-block auth-modal" 
+          style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) toggleAuthModal();
+          }}
+        >
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content bg-dark border-0 shadow-lg">
+              <div className="modal-header border-secondary pb-0">
+                <div className="w-100 text-center">
+                  <h4 className="modal-title text-light mb-1">
+                    <i className={`bi ${authMode === 'login' ? 'bi-box-arrow-in-right' : 'bi-person-plus'} me-2 text-primary`}></i>
+                    {authMode === 'login' ? 'Welcome Back!' : 'Join Shayari.Com'}
+                  </h4>
+                  <p className="text-muted small mb-3">
+                    {authMode === 'login' 
+                      ? 'Sign in to your account to continue' 
+                      : 'Create your account to start sharing'}
+                  </p>
+                </div>
+                <button 
+                  type="button" 
+                  className="btn-close btn-close-white position-absolute end-0 top-0 mt-3 me-3" 
+                  onClick={toggleAuthModal}
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="modal-body">
+                <form onSubmit={handleLogin}>
+                  {/* Email Field */}
+                  <div className="mb-3">
+                    <label htmlFor="email" className="form-label text-light">
+                      <i className="bi bi-envelope me-2"></i>Email
+                    </label>
+                    <input 
+                      type="email" 
+                      className="form-control bg-dark border-secondary text-light" 
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="Enter your email"
+                      required
+                    />
+                  </div>
+
+                  {/* Password Field */}
+                  <div className="mb-3">
+                    <label htmlFor="password" className="form-label text-light">
+                      <i className="bi bi-lock me-2"></i>Password
+                    </label>
+                    <div className="input-group">
+                      <input 
+                        type={showPassword ? "text" : "password"} 
+                        className="form-control bg-dark border-secondary text-light" 
+                        id="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleInputChange}
+                        placeholder="Enter your password"
+                        required
+                      />
+                      <button 
+                        className="btn btn-outline-secondary" 
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        <i className={`bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'}`}></i>
+                      </button>
+                    </div>
+                    {authMode === 'signup' && (
+                      <small className="text-muted">Password must be at least 8 characters long</small>
+                    )}
+                  </div>
+
+                  {/* Confirm Password Field (Only for signup) */}
+                  {authMode === 'signup' && (
+                    <div className="mb-3">
+                      <label htmlFor="confirmPassword" className="form-label text-light">
+                        <i className="bi bi-lock-fill me-2"></i>Confirm Password
+                      </label>
+                      <div className="input-group">
+                        <input 
+                          type={showConfirmPassword ? "text" : "password"} 
+                          className="form-control bg-dark border-secondary text-light" 
+                          id="confirmPassword"
+                          name="confirmPassword"
+                          value={formData.confirmPassword}
+                          onChange={handleInputChange}
+                          placeholder="Confirm your password"
+                          required={authMode === 'signup'}
+                        />
+                        <button 
+                          className="btn btn-outline-secondary" 
+                          type="button"
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        >
+                          <i className={`bi ${showConfirmPassword ? 'bi-eye-slash' : 'bi-eye'}`}></i>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Remember Me / Terms (Login / Signup) */}
+                  <div className="mb-4">
+                    {authMode === 'login' ? (
+                      <div className="form-check">
+                        <input 
+                          className="form-check-input" 
+                          type="checkbox" 
+                          id="rememberMe"
+                          name="rememberMe"
+                          checked={formData.rememberMe}
+                          onChange={handleInputChange}
+                        />
+                        <label className="form-check-label text-light" htmlFor="rememberMe">
+                          Remember me
+                        </label>
+                        <a href="#forgot-password" className="text-primary text-decoration-none float-end">
+                          Forgot Password?
+                        </a>
+                      </div>
+                    ) : (
+                      <div className="form-check">
+                        <input className="form-check-input" type="checkbox" id="terms" required />
+                        <label className="form-check-label text-light" htmlFor="terms">
+                          I agree to the <a href="#terms" className="text-primary text-decoration-none">Terms of Service</a> and <a href="#privacy" className="text-primary text-decoration-none">Privacy Policy</a>
+                        </label>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Submit Button */}
+                  <button type="submit" className="btn btn-primary w-100 py-2 fw-semibold mb-3">
+                    <i className={`bi ${authMode === 'login' ? 'bi-box-arrow-in-right' : 'bi-person-check'} me-2`}></i>
+                    {authMode === 'login' ? 'Sign In' : 'Create Account'}
+                  </button>
+
+                  {/* Divider */}
+                  <div className="text-center mb-3">
+                    <span className="text-muted">or</span>
+                  </div>
+
+                  {/* Social Login Buttons */}
+                  <div className="d-grid gap-2 mb-3">
+                    <button type="button" className="btn btn-outline-light">
+                      <i className="bi bi-google me-2"></i>Continue with Google
+                    </button>
+                    <button type="button" className="btn btn-outline-light">
+                      <i className="bi bi-facebook me-2"></i>Continue with Facebook
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="modal-footer border-secondary pt-0">
+                <div className="w-100 text-end">
+                  <p className="text-muted mb-0">
+                    {authMode === 'login' ? "Don't have an account?" : "Already have an account?"}
+                    <button 
+                      type="button" 
+                      className="btn btn-link text-primary text-decoration-none p-0 ms-1"
+                      onClick={() => switchAuthMode(authMode === 'login' ? 'signup' : 'login')}
+                    >
+                      {authMode === 'login' ? 'Sign up here' : 'Sign in here'}
+                    </button>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Mobile Search Modal */}
       {isSearchModalOpen && (
-        <div className="modal fade show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+        <div 
+          className="modal fade show d-block" 
+          style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) toggleSearchModal();
+          }}
+        >
           <div className="modal-dialog modal-dialog-centered">
             <div className="modal-content bg-dark border-0">
               <div className="modal-header border-secondary">
@@ -309,7 +591,7 @@ export default function Navbar() {
                 ></button>
               </div>
               <div className="modal-body">
-                <form>
+                <div>
                   <div className="input-group">
                     <input 
                       type="search" 
@@ -317,7 +599,7 @@ export default function Navbar() {
                       placeholder="Search for shayari, categories, or poets..."
                       autoFocus
                     />
-                    <button className="btn btn-primary" type="submit">
+                    <button className="btn btn-primary" type="button">
                       <i className="bi bi-search"></i>
                     </button>
                   </div>
@@ -330,13 +612,14 @@ export default function Navbar() {
                       <span className="badge bg-secondary me-2 mb-2">Sad</span>
                     </div>
                   </div>
-                </form>
+                </div>
               </div>
             </div>
           </div>
         </div>
       )}
 
+     
     </>
   );
 }
