@@ -73,7 +73,7 @@ export default function Navbar() {
     }
   };
 
-  // Switch between login and signup
+  // Switch between login and signup form
   const switchAuthMode = (mode) => {
     setAuthMode(mode);
     setFormData({
@@ -103,7 +103,7 @@ export default function Navbar() {
   } catch (err) {
     console.error(err.response?.data?.msg || 'Login error');
   }
-     // Mock authentication success
+     // Mock authentication success 
     setIsAuthenticated(true);
     setIsAuthModalOpen(false);
     localStorage.setItem('hasVisited', 'true');
@@ -117,7 +117,7 @@ export default function Navbar() {
   setIsAuthenticated(false);
   
 };
-  // Close modals when clicking outside
+  // Close modals when clicking outside 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!event.target.closest('.navbar')) {
