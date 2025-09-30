@@ -56,7 +56,7 @@ export default function ShayariForm({ onPost }) {
               </div>
               
               <div className="card-body p-4 p-md-5">
-                <form onSubmit={handleSubmit}>
+                <form id="#post" onSubmit={handleSubmit}>
                   <div className="mb-4">
                     <label htmlFor="name" className="form-label fw-semibold text-dark">
                       <i className="bi bi-person me-2"></i>Your Name

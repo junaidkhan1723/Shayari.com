@@ -25,7 +25,7 @@ function App() {
       <ShayariForm onPost={fetchShayaris} />
 
       {/* Shayari Feed Section */}
-      <div className="bg-light py-5 " id="Shayaripage">
+      <div id="browse" className="bg-light py-5 ">
         <div className="container">
           {/* Section Header */}
           <div className="row mb-5">
@@ -56,16 +56,19 @@ function App() {
             ) : (
               /* Empty State */
               <div className="col-12">
-                <div className="text-center py-5">
-                  <div className="mb-4">
+                <div className="text-center ">
+                  <div className="mb-1">
                     <i
                       className="bi bi-journal-text text-muted"
                       style={{ fontSize: "4rem" }}
                     ></i>
                   </div>
-                  <h4 className="text-muted mb-3">
-                    Server is Loading <i class="bi bi-arrow-clockwise"></i>
-                  </h4>
+                  <div
+                    class="spinner-border spinner-border-lg text-primary"
+                    role="status"
+                  >
+                  </div>
+                    <h3 class="text-muted">Server is Loading...</h3>
                   <h4 className="text-muted mb-3">No Shayaris Yet</h4>
                   <p className="text-muted mb-4">
                     Be the first to share your beautiful thoughts and emotions

@@ -20,7 +20,7 @@ export default function Footer() {
               </p>
 
               {/* Social Media Links */}
-              <div className="d-flex gap-3">
+              <div id="contact" className="d-flex gap-3">
                 <a
                   href="https://www.linkedin.com/public-profile/settings?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_self_edit_contact-info%3BEUrjUvvcTtOpg5xQvPY1eQ%3D%3D"
                   className="btn btn-outline-light btn-sm rounded-circle p-2"
@@ -231,9 +231,9 @@ export default function Footer() {
           <div className="row align-items-center">
             <div className="col-12 col-md-6 text-center text-md-start">
               <p className="mb-0 text-light opacity-75">
-                © {currentYear} Shayari.Com Made with
+                © {currentYear} Shayari.Com 
                 <i className="bi bi-heart-fill text-danger mx-1"></i>
-                for shayari & poetry lovers :: ©Junaid Khan
+                 Junaid Khan
               </p>
             </div>
             <div className="col-12 col-md-6 text-center text-md-end mt-2 mt-md-0">
