@@ -15,7 +15,7 @@ export default function ShayariCard({ shayari, onUpdate }) {
     
     setIsDeleting(true);
     try {
-      await axios.delete(`${import.meta.env.VITE_BASE_URL}/${shayari._id}`);
+      await axios.delete(`https://shayari-com-0te7.onrender.com/api/shayari/${shayari._id}`);
       onUpdate();
     } catch (error) {
       console.error("Error deleting shayari:", error);
